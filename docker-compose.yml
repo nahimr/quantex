@@ -12,7 +12,7 @@ services:
       - POSTGRES_PASSWORD=postgres
   web:
     container_name: quantex_backend
-    build: 
+    build:
       context: ./code
       dockerfile: ../docker/django/Dockerfile
     command: python main.py runserver 0.0.0.0:8080
