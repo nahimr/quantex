@@ -1,5 +1,5 @@
 version: "3.9"
-   
+
 services:
   db:
     container_name: quantex_db 
@@ -12,12 +12,14 @@ services:
       - POSTGRES_PASSWORD=postgres
   web:
     container_name: quantex_backend
-    build: ./docker/django
-    command: python manage.py runserver 0.0.0.0:8000
+    build: 
+      context: ./code
+      dockerfile: ../docker/django/Dockerfile
+    command: python main.py runserver 0.0.0.0:8080
     volumes:
-      - .:/code
+      - ./code:/code
     ports:
-      - "8000:8000"
+      - "8080:8080"
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
