@@ -6,8 +6,8 @@ class Instrument:
     symbol : string = ""
     baseCurrency : string = ""
     region : string = ""
-    ask : float = ""
-    bid : float = ""
+    ask : float = 0.0
+    bid : float = 0.0
     name : string = ""
 
     def __init__(self, symbol : string) -> None:
