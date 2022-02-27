@@ -6,4 +6,4 @@ requests>=2.14.2
 lxml>=4.5.1
 yfinance
 nltk==3.7
-psycopg2-binary 
+psycopg2-binary
