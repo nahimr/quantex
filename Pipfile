@@ -4,7 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
+Django = "==4.0.2"
+pytrends = "==4.8.0"
+pandas = ">=0.23.1"
+numpy = ">=1.11.1"
+requests = ">=2.14.2"
+lxml = ">=4.5.1"
+yfinance = "*"
+nltk = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
