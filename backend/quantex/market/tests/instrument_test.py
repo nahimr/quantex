@@ -8,6 +8,7 @@ class InstrumentTest(TestCase):
         return super().setUp()
 
     def test_fetch_instrument(self) -> None:
-        MsgDebug("Fetching AAPL Stock")
-        instr = InstrumentFactory.CreateInstrument("AAPL")
+        symbol = "AAPL"
+        MsgDebug(f"Fetching {symbol} Stock")
+        instr = InstrumentFactory.CreateInstrument(symbol)
         MsgDebug(instr.getData())
