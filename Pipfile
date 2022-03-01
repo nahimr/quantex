@@ -13,6 +13,7 @@ lxml = ">=4.5.1"
 yfinance = "*"
 nltk = "*"
 psycopg2-binary = "*"
+tk = "*"
 
 [dev-packages]
 
