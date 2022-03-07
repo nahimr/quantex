@@ -11,4 +11,4 @@ class InstrumentTest(TestCase):
         symbol = "AAPL"
         MsgDebug(f"Fetching {symbol} Stock")
         instr = InstrumentFactory.CreateInstrument(symbol)
-        MsgDebug(instr.getData())
+        MsgSuccess(instr.getData())

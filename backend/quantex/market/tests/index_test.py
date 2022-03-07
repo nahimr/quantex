@@ -11,7 +11,7 @@ class IndexTest(TestCase):
     def test_fetch_index(self) -> None:
         symbol = "GAFAMIndex"
         symbolsToFetch = ["AAPL", "MSFT", "GOOGL", "AMZN", "FB"]
-        MsgDebug("Fetching AAPL, MSFT Stock")
+        MsgDebug(f"Fetching {', '.join(symbolsToFetch)} Stock")
         index = IndexFactory.CreateIndex(symbol, InstrumentFactory.CreateInstruments(symbolsToFetch))
-        MsgSuccess(f"{symbol} made with success !")
         MsgDebug(index.getData())
+        MsgSuccess(f"{symbol} made with success !")
