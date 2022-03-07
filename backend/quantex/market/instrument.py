@@ -1,6 +1,7 @@
 import string
 import pandas as pd
 from django.db import models
+from quantex.market.market_data import MarketData
 
 class Instrument(models.Model):
 
@@ -8,7 +9,7 @@ class Instrument(models.Model):
     name : string = models.CharField(max_length=64)
     baseCurrency : string = models.CharField(max_length=3)
     region : string = models.CharField(max_length=128)
-    data : pd.DataFrame = models.JSONField()
+    data : MarketData = models.ForeignKey(MarketData, on_delete=models.CASCADE)
 
     def __init__(self, symbol : string) -> None:
         self.symbol = symbol
