@@ -16,6 +16,7 @@ psycopg2-binary = "*"
 tk = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+coverage = "*"
 
 [dev-packages]
 

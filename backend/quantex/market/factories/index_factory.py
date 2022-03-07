@@ -1,4 +1,3 @@
-from curses.ascii import CR
 import string
 from utils.prints import MsgDebug
 from quantex.market.securities.index import Index
@@ -17,8 +16,8 @@ class IndexFactory:
 
         data_concat = pd.concat(newData)
 
-        by_row_index = data_concat.groupby(data_concat.index)
-        data_means = by_row_index.mean()
+        group_data = data_concat.groupby(data_concat.index)
+        data_means = group_data.mean()
         
         index.setData(data_means)
 

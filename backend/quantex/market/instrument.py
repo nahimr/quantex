@@ -1,13 +1,14 @@
 import string
 import pandas as pd
+from django.db import models
 
-class Instrument(object):
+class Instrument(models.Model):
 
-    name : string = ""
-    symbol : string = ""
-    baseCurrency : string = ""
-    region : string = ""
-    data : pd.DataFrame
+    symbol : string = models.CharField(primary_key=True, max_length=5, unique=True)
+    name : string = models.CharField(max_length=64)
+    baseCurrency : string = models.CharField(max_length=3)
+    region : string = models.CharField(max_length=128)
+    data : pd.DataFrame = models.JSONField()
 
     def __init__(self, symbol : string) -> None:
         self.symbol = symbol
