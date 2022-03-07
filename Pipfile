@@ -14,6 +14,8 @@ yfinance = "*"
 nltk = "*"
 psycopg2-binary = "*"
 tk = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
