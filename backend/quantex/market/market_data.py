@@ -13,3 +13,9 @@ class MarketData(models.Model):
     volume: list = ArrayField(base_field=models.FloatField())
     dividends: list = ArrayField(base_field=models.FloatField())
     stocks_splits: list = ArrayField(base_field=models.FloatField())
+
+    @classmethod
+    def create(cls):
+        marketData = cls()
+
+        return marketData

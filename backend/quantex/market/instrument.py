@@ -1,5 +1,6 @@
 import string
 import pandas as pd
+import yfinance as yf
 from django.db import models
 from quantex.market.market_data import MarketData
 
@@ -9,10 +10,16 @@ class Instrument(models.Model):
     name : string = models.CharField(max_length=64)
     baseCurrency : string = models.CharField(max_length=3)
     region : string = models.CharField(max_length=128)
-    data : MarketData = models.ForeignKey(MarketData, on_delete=models.CASCADE)
+    data : MarketData = models.ForeignKey(MarketData, related_name='quantex_marketdata', null=True, on_delete=models.CASCADE)
 
-    def __init__(self, symbol : string) -> None:
-        self.symbol = symbol
+    @classmethod
+    def create(cls, symbol: string, name: string):
+        instrument = cls(symbol=symbol, name=name)
+        
+        ticker = yf.Ticker(instrument.symbol)
+        hist = ticker.history(period="max")
+        instrument.setData(hist)
+        return instrument
     
     def getName(self) -> string:
         return self.name
@@ -26,20 +33,38 @@ class Instrument(models.Model):
     def getRegion(self) -> string:
         return self.region
 
-    def getClose(self) -> pd.DataFrame:
-        return self.data.get("Close")
+    def getClose(self) -> list:
+        return self.data.close
     
-    def getOpen(self) -> pd.DataFrame:
-        return self.data.get("Open")
+    def getOpen(self) -> list:
+        return self.data.open
 
-    def getHigh(self) -> pd.DataFrame:
-        return self.data.get("High")
+    def getHigh(self) -> list:
+        return self.data.high
 
-    def getLow(self) -> pd.DataFrame:
-        return self.data.get("Low")
+    def getLow(self) -> list:
+        return self.data.low
+
+    def setName(self, name : string) -> None:
+        self.name = name
 
     def setData(self, data : pd.DataFrame) -> None:
-        self.data = data
+        self.data.close = data.get('Close')
+        self.data.open = data.get('Open')
+        self.data.low = data.get('Low')
+        self.data.high = data.get('High')
+        self.data.volume = data.get('Volume')
 
     def getData(self) -> pd.DataFrame:
-        return self.data
+        dataFrame = pd.DataFrame()
+
+        dataFrame.insert(loc=0, column='Date', value=self.data.date)
+        dataFrame.insert(loc=0, column='Close', value=self.data.close)
+        dataFrame.insert(loc=0, column='Open', value=self.data.open)
+        dataFrame.insert(loc=0, column='Low', value=self.data.low)
+        dataFrame.insert(loc=0, column='High', value=self.data.high)
+        dataFrame.insert(loc=0, column='Volume', value=self.data.volume)
+        dataFrame.insert(loc=0, column='Dividends', value=self.data.dividends)
+        dataFrame.insert(loc=0, column='Stock Splits', value=self.data.stocks_splits)
+
+        return dataFrame
