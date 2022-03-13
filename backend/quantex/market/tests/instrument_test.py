@@ -6,12 +6,13 @@ from utils.prints import *
 class InstrumentTest(TestCase):
 
     def setUp(self) -> None:
-        MsgDebug("Creating Instrument")
-        Instrument.objects.create(symbol="AAPL", name="Apple", baseCurrency="USD", region="US")
-        return super().setUp()
+        pass
 
     def test_fetch_instrument(self) -> None:
-        instrument : Instrument = Instrument.objects.get(symbol="APPL")
-        MsgDebug(f"Fetching {instrument.symbol} Stock")
+        instrument : Instrument = Instrument(symbol="AAPL", name="Apple", baseCurrency="USD", region="USA")
+        instrument.save()
+        MsgSuccess(Instrument.objects.values_list('symbol', flat=True))
+        instrument2 : Instrument = Instrument.objects.get(pk='APPL')
+        #MsgDebug(f"Fetching {self.instrument.symbol} Stock")
         #instr = InstrumentFactory.CreateInstrument(instrument.symbol)
-        MsgSuccess(instrument.getData())
+        #MsgSuccess(self.instrument.getData())

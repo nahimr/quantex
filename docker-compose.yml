@@ -12,6 +12,7 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    command: ["postgres", "-c", "log_statement=all"]
   web:
     container_name: quantex_backend
     build:
