@@ -6,7 +6,9 @@ from utils.prints import *
 class InstrumentTest(TestCase):
 
     def setUp(self) -> None:
-        Instrument.objects.create(symbol="AAPL", name="Apple")
+        MsgDebug("Creating Instrument")
+        Instrument.objects.create(symbol="AAPL", name="Apple", baseCurrency="USD", region="US")
+        return super().setUp()
 
     def test_fetch_instrument(self) -> None:
         instrument : Instrument = Instrument.objects.get(symbol="APPL")

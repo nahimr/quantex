@@ -6,7 +6,7 @@ from quantex.market.market_data import MarketData
 
 class Instrument(models.Model):
 
-    symbol : string = models.CharField(primary_key=True, max_length=5, unique=True)
+    symbol : string = models.CharField(primary_key=True, max_length=5, unique=True, null=False)
     name : string = models.CharField(max_length=64)
     baseCurrency : string = models.CharField(max_length=3)
     region : string = models.CharField(max_length=128)
