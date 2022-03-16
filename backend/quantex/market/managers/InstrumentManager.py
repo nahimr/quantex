@@ -11,8 +11,8 @@ class InstrumentManager(models.Manager):
         instrument, created = self.get_or_create(symbol=symbol, name=name, baseCurrency=baseCurrency, region=region)
 
         ticker = yf.Ticker(instrument.symbol)
-        hist = ticker.history(period="max")
-        instrument.data = MarketData()
+        hist = ticker.history(period="max", interval="1d")
+        instrument.data = MarketData(symbol=symbol)
         instrument.setData(hist)
         instrument.data.save()
         instrument.save()

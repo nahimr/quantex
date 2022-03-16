@@ -1,10 +1,12 @@
 import string
 import pandas as pd
+import pytz
 import yfinance as yf
 from django.db import models
 from utils.prints import MsgDebug
 from quantex.market.managers.InstrumentManager import InstrumentManager
 from quantex.market.market_data import MarketData
+import numpy as np
 
 class Instrument(models.Model):
 
@@ -43,7 +45,7 @@ class Instrument(models.Model):
         self.name = name
 
     def setData(self, data : pd.DataFrame) -> None:
-        self.data.date = pd.to_datetime(data.index).values.tolist()
+        self.data.date = pd.to_datetime(data.index, utc=True).tolist()
         self.data.close = data.get('Close').values.tolist()
         self.data.open = data.get('Open').values.tolist()
         self.data.low = data.get('Low').values.tolist()
