@@ -1,8 +1,6 @@
-from enum import unique
 import string
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from numpy import float64
 import pandas as pd
 
 class MarketData(models.Model):
