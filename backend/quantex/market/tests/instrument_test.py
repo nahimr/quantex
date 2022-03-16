@@ -1,7 +1,5 @@
 from django.test import TestCase
 import yfinance
-from quantex.market.instrument import Instrument
-from quantex.market.factories.instrument_factory import InstrumentFactory
 from utils.prints import *
 
 class InstrumentTest(TestCase):
@@ -18,7 +16,7 @@ class InstrumentTest(TestCase):
         # #instr = InstrumentFactory.CreateInstrument(instrument.symbol)
         # #MsgSuccess(self.instrument.getData())
 
-        ticker = yfinance.Ticker('AAPL')
+        ticker = yfinance.Ticker('^DJI')
         MsgDebug(ticker.balance_sheet)
         MsgDebug(ticker.actions)
         MsgDebug(ticker.analysis)

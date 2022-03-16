@@ -1,8 +1,8 @@
 import string
 from django.db import models
 import yfinance as yf
+from quantex.financials.sustainability import Sustainability
 from quantex.market.market_data import MarketData
-from utils.prints import MsgDebug
 
 class InstrumentManager(models.Manager):
 
@@ -13,8 +13,10 @@ class InstrumentManager(models.Manager):
         ticker = yf.Ticker(instrument.symbol)
         hist = ticker.history(period="max", interval="1d")
         instrument.data = MarketData(symbol=symbol)
-        instrument.setData(hist)
+        instrument.sustainability = Sustainability(symbol=symbol)
+        # instrument.setData(hist)
+        # instrument.setSustainability(ticker.sustainability)
         instrument.data.save()
+        instrument.sustainability.save()
         instrument.save()
         return instrument
-
