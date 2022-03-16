@@ -9,7 +9,7 @@ class InstrumentManager(models.Manager):
     def create_instrument(self, symbol: string, name: string, baseCurrency: string, region: string):
         # TODO: Implement Try Except
         instrument, created = self.get_or_create(symbol=symbol, name=name, baseCurrency=baseCurrency, region=region)
-
+        
         ticker = yf.Ticker(instrument.symbol)
         hist = ticker.history(period="max", interval="1d")
         instrument.data = MarketData(symbol=symbol)

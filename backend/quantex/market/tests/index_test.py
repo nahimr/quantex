@@ -9,9 +9,10 @@ class IndexTest(TestCase):
         return super().setUp()
 
     def test_fetch_index(self) -> None:
-        symbol = "GAFAMIndex"
-        symbolsToFetch = ["AAPL", "MSFT", "GOOGL", "AMZN", "FB"]
-        MsgDebug(f"Fetching {', '.join(symbolsToFetch)} Stock")
-        index = IndexFactory.CreateIndex(symbol, InstrumentFactory.CreateInstruments(symbolsToFetch))
-        MsgDebug(index.getData())
-        MsgSuccess(f"{symbol} made with success !")
+        # symbol = "GAFAMIndex"
+        # symbolsToFetch = ["AAPL", "MSFT", "GOOGL", "AMZN", "FB"]
+        # MsgDebug(f"Fetching {', '.join(symbolsToFetch)} Stock")
+        # index = IndexFactory.CreateIndex(symbol, InstrumentFactory.CreateInstruments(symbolsToFetch))
+        # MsgDebug(index.getData())
+        # MsgSuccess(f"{symbol} made with success !")
+        pass

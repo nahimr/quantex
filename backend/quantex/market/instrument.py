@@ -1,12 +1,8 @@
 import string
 import pandas as pd
-import pytz
-import yfinance as yf
 from django.db import models
-from utils.prints import MsgDebug
 from quantex.market.managers.InstrumentManager import InstrumentManager
 from quantex.market.market_data import MarketData
-import numpy as np
 
 class Instrument(models.Model):
 
@@ -51,17 +47,23 @@ class Instrument(models.Model):
         self.data.low = data.get('Low').values.tolist()
         self.data.high = data.get('High').values.tolist()
         self.data.volume = data.get('Volume').values.tolist()
+        self.data.dividends = data.get('Dividends').values.tolist()
+        self.data.stocks_splits = data.get('Stock Splits').values.tolist()
 
     def getData(self) -> pd.DataFrame:
-        dataFrame = pd.DataFrame()
-
-        dataFrame.insert(loc=0, column='Date', value=self.data.date)
-        dataFrame.insert(loc=0, column='Close', value=self.data.close)
-        dataFrame.insert(loc=0, column='Open', value=self.data.open)
-        dataFrame.insert(loc=0, column='Low', value=self.data.low)
-        dataFrame.insert(loc=0, column='High', value=self.data.high)
-        dataFrame.insert(loc=0, column='Volume', value=self.data.volume)
-        dataFrame.insert(loc=0, column='Dividends', value=self.data.dividends)
-        dataFrame.insert(loc=0, column='Stock Splits', value=self.data.stocks_splits)
+        dataFrame = pd.DataFrame({
+            'Date': self.data.date,
+            'Close': self.data.close,
+            'Open': self.data.open,
+            'Low': self.data.low,
+            'High': self.data.close,
+            'Volume': self.data.volume,
+            'Dividends': self.data.dividends,
+            'Stock Splits': self.data.stocks_splits,
+        })
+        dataFrame.set_index('Date')   
 
         return dataFrame
+
+    def __str__(self) -> str:
+        return f"Symbol: {self.symbol},\nName: {self.name},\nBase Currency: {self.baseCurrency},\nRegion: {self.region}"
