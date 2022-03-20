@@ -35,3 +35,20 @@ class MarketData(models.Model):
         dataFrame.set_index('Date')   
 
         return dataFrame
+
+    def setData(self, data : pd.DataFrame) -> None:
+        if data is None:
+            raise Exception("data is None !")
+
+        self.date = pd.to_datetime(data.index, utc=True).tolist()
+        self.close = data.get('Close').values.tolist()
+        self.open = data.get('Open').values.tolist()
+        self.low = data.get('Low').values.tolist()
+        self.high = data.get('High').values.tolist()
+        self.volume = data.get('Volume').values.tolist()
+
+        dividends = data.get('Dividends').values.tolist()
+        stocks_splits = data.get('Stock Splits').values.tolist()
+
+        self.dividends = dividends if len(set(dividends)) > 1 else None
+        self.stocks_splits = stocks_splits if len(set(stocks_splits)) > 1 else None

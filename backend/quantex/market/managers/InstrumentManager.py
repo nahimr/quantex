@@ -25,8 +25,9 @@ class InstrumentManager(models.Manager):
         hist = ticker.history(period="max", interval="1d")
         instrument.data = MarketData(symbol=symbol)
         instrument.cashFlow = CashFlow(symbol=symbol)
-        instrument.setData(hist)
-        instrument.setCashFlow(ticker.cashflow)
+        
+        instrument.data.setData(hist)
+        instrument.cashFlow.setData(ticker.cashflow)
 
         MsgDebug(f"Updating {name} instrument object to database !")
 
