@@ -1,3 +1,4 @@
+import pandas as pd
 from django.test import TestCase
 import yfinance
 from utils.prints import *
@@ -16,7 +17,7 @@ class InstrumentTest(TestCase):
         # #instr = InstrumentFactory.CreateInstrument(instrument.symbol)
         # #MsgSuccess(self.instrument.getData())
 
-        ticker = yfinance.Ticker('^DJI')
+        ticker = yfinance.Ticker('GOOGL')
         MsgDebug(ticker.balance_sheet)
         MsgDebug(ticker.actions)
         MsgDebug(ticker.analysis)
@@ -26,4 +27,7 @@ class InstrumentTest(TestCase):
         MsgDebug(ticker.earnings)
         MsgDebug(ticker.info)
         MsgDebug(ticker.major_holders)
-        MsgDebug(ticker.sustainability)
+
+        bs = pd.DataFrame.transpose(ticker.cashflow)
+        bs.reset_index()
+        MsgDebug(bs)

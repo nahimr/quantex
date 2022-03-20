@@ -1,7 +1,7 @@
 import string
 import pandas as pd
 from django.db import models
-from quantex.financials.sustainability import Sustainability
+from quantex.financials.cashflow import CashFlow
 from quantex.market.managers.InstrumentManager import InstrumentManager
 from quantex.market.market_data import MarketData
 from utils.prints import *
@@ -13,7 +13,7 @@ class Instrument(models.Model):
     baseCurrency : string = models.CharField(max_length=3)
     region : string = models.CharField(max_length=3)
     data : MarketData = models.ForeignKey(MarketData, related_name='quantex_marketdata', null=True, on_delete=models.CASCADE)
-    sustainability : Sustainability = models.ForeignKey(Sustainability, related_name='quantex_sustainability', null=True, on_delete=models.CASCADE)
+    cashFlow : CashFlow = models.ForeignKey(CashFlow, related_name='quantex_cashflow', null=True, on_delete=models.CASCADE)
     objects = InstrumentManager()
     
     def getName(self) -> string:
@@ -44,45 +44,56 @@ class Instrument(models.Model):
         self.name = name
 
     def setData(self, data : pd.DataFrame) -> None:
+        if data is None:
+            raise Exception("data is None !")
+
         self.data.date = pd.to_datetime(data.index, utc=True).tolist()
         self.data.close = data.get('Close').values.tolist()
         self.data.open = data.get('Open').values.tolist()
         self.data.low = data.get('Low').values.tolist()
         self.data.high = data.get('High').values.tolist()
         self.data.volume = data.get('Volume').values.tolist()
-        self.data.dividends = data.get('Dividends').values.tolist()
-        self.data.stocks_splits = data.get('Stock Splits').values.tolist()
 
-    def setSustainability(self, esg : pd.DataFrame) -> None:
-        data = pd.DataFrame.transpose(esg)
-        MsgDebug(data)
-        # TODO: Refactoring with foreach
-        #self.sustainability.date = pd.to_datetime(data.index, utc=True).tolist()
-        self.sustainability.palmOil = data.get('palmOil').values.tolist()
-        self.sustainability.controversialWeapons = data.get('controversialWeapons').values.tolist()
-        self.sustainability.gambling = data.get('gambling').values.tolist()
-        self.sustainability.socialScore = data.get('socialScore').values.tolist()
-        self.sustainability.nuclear = data.get('nuclear').values.tolist()
-        self.sustainability.furLeather = data.get('furLeather').values.tolist()
-        self.sustainability.alcoholic = data.get('alcoholic').values.tolist()
-        self.sustainability.gmo = data.get('gmo').values.tolist()
-        self.sustainability.socialPercentile = data.get('socialPercentile').values.tolist()
-        self.sustainability.peerCount = data.get('peerCount').values.tolist()
-        self.sustainability.governanceScore = data.get('governanceScore').values.tolist()
-        self.sustainability.environmentPercentile = data.get('environmentPercentile').values.tolist()
-        self.sustainability.animalTesting = data.get('animalTesting').values.tolist()
-        self.sustainability.tobacco = data.get('tobacco').values.tolist()
-        self.sustainability.totalEsg = data.get('totalEsg').values.tolist()
-        self.sustainability.highestControversy = data.get('highestControversy').values.tolist()
-        self.sustainability.esgPerformance = data.get('esgPerformance').values.tolist()
-        self.sustainability.coal = data.get('coal').values.tolist()
-        self.sustainability.pesticides = data.get('pesticides').values.tolist()
-        self.sustainability.adult = data.get('adult').values.tolist()
-        self.sustainability.smallArm = data.get('smallArm')
-        self.sustainability.militaryContract = data.get('militaryContract').values.tolist()
-        self.sustainability.percentile = data.get('percentile').values.tolist()
-        self.sustainability.governancePercentile = data.get('governancePercentile').values.tolist()
+        dividends = data.get('Dividends').values.tolist()
+        stocks_splits = data.get('Stock Splits').values.tolist()
 
+        self.data.dividends = dividends if len(set(dividends)) > 1 else None
+        self.data.stocks_splits = stocks_splits if len(set(stocks_splits)) > 1 else None
+
+    def setCashFlow(self, cf : pd.DataFrame) -> None:
+        if cf is None:
+            raise Exception("Balance Sheet data is None !")
+        
+        data = pd.DataFrame.transpose(cf)
+
+        attrs = [
+            ("Investments", "investments"),
+            ("Change To Liabilities", "changeToLiabilities"),
+            ("Total Cashflows From Investing Activities", "totCFInvestingActivities"),
+            ("Net Borrowings", "netBorrowings"),
+            ("Total Cash From Financing Activities", "totCFinancingActivities"),
+            ("Change To Operating Activities", "changeToOperatingActivities"),
+            ("Net Income", "netIncome"),
+            ("Change In Cash", "changeInCash"),
+            ("Repurchase Of Stock", "repurchaseOfStock"),
+            ("Effect Of Exchange Rate", "effectOfExchangeRate"),
+            ("Total Cash From Operating Activities", "totCFOperatingActivites"),
+            ("Depreciation", "depreciation"),
+            ("Other Cashflows From Investing Activities", "otherCFInvestingActivites"),
+            ("Change To Account Receivables", "changeToAccountReceivables"),
+            ("Other Cashflows From Financing Activities", "otherCFFinancingActivites"),
+            ("Change To Netincome", "changeToNetIncome"),
+            ("Capital Expenditures", "capitalExpenditures"),
+        ]
+
+        for attr in attrs:
+            nameInDF = attr[0]
+            attributeInObject = attr[1]
+            value = data.get(nameInDF)
+            
+            MsgDebug(f"{value}")
+            if value is None: continue
+            setattr(self.cashFlow, attributeInObject, value.values.tolist())
 
     def __str__(self) -> str:
         return f"Symbol: {self.symbol},\nName: {self.name},\nBase Currency: {self.baseCurrency},\nRegion: {self.region}"

@@ -1,3 +1,5 @@
+from django.conf import settings
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -22,4 +24,5 @@ def MsgSuccess(msg) -> None:
     Msg(msg, bcolors.OKGREEN)
 
 def MsgDebug(msg) -> None:
+    if not settings.DEBUG: return
     Msg(msg, bcolors.OKCYAN)
