@@ -62,7 +62,7 @@ class Instrument(models.Model):
 
     def setCashFlow(self, cf : pd.DataFrame) -> None:
         if cf is None:
-            raise Exception("Balance Sheet data is None !")
+            raise Exception("Cash Flow data is None !")
         
         data = pd.DataFrame.transpose(cf)
 

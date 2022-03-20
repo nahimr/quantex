@@ -18,7 +18,7 @@ class InstrumentManager(models.Manager):
 
         if not created: 
             MsgDebug(f"Updating {symbol} !")
-
+        
         MsgDebug(f"Getting {symbol} data from yFinance !")
         ticker = yf.Ticker(instrument.symbol)
         MsgDebug(f"Getting {symbol} history from yFinance !")
