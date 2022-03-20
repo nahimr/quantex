@@ -1,5 +1,4 @@
 import string
-import pandas as pd
 from django.db import models
 from quantex.financials.cashflow import CashFlow
 from quantex.market.managers.InstrumentManager import InstrumentManager
@@ -8,12 +7,12 @@ from utils.prints import *
 
 class Instrument(models.Model):
 
-    symbol : string = models.CharField(primary_key=True, max_length=5, unique=True, null=False)
+    symbol : string = models.CharField(primary_key=True, max_length=7, unique=True, null=False)
     name : string = models.CharField(max_length=64)
-    baseCurrency : string = models.CharField(max_length=3)
-    region : string = models.CharField(max_length=3)
+    region : string = models.CharField(max_length=56)
     data : MarketData = models.ForeignKey(MarketData, related_name='quantex_marketdata', null=True, on_delete=models.CASCADE)
     cashFlow : CashFlow = models.ForeignKey(CashFlow, related_name='quantex_cashflow', null=True, on_delete=models.CASCADE)
+    details : string = models.JSONField(null=True)
     objects = InstrumentManager()
     
     def getName(self) -> string:
@@ -44,4 +43,4 @@ class Instrument(models.Model):
         self.name = name
 
     def __str__(self) -> str:
-        return f"Symbol: {self.symbol},\nName: {self.name},\nBase Currency: {self.baseCurrency},\nRegion: {self.region}"
+        return f"Symbol: {self.symbol},\nName: {self.name},\nRegion: {self.region}"

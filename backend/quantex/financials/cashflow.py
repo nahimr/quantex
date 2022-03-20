@@ -5,7 +5,7 @@ import pandas as pd
 
 class CashFlow(models.Model):
 
-    symbol : string = models.CharField(primary_key=True, max_length=5, unique=True, null=False, default="")
+    symbol : string = models.CharField(primary_key=True, max_length=7, unique=True, null=False, default="")
     date : list = ArrayField(base_field=models.DateTimeField(null=True))
     investments : list = ArrayField(base_field=models.FloatField(null=True), null=True)
     changeToLiabilities : list = ArrayField(base_field=models.FloatField(null=True), null=True)

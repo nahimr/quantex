@@ -4,7 +4,7 @@ from django.contrib.postgres.fields import ArrayField
 
 class Sustainability(models.Model):
 
-    symbol: string = models.CharField(primary_key=True, max_length=5, unique=True, null=False, default="")
+    symbol: string = models.CharField(primary_key=True, max_length=7, unique=True, null=False, default="")
     date: list = ArrayField(base_field=models.DateTimeField(null=True))
     palmOil : list = ArrayField(base_field=models.BooleanField(null=True))
     controversialWeapons : list = ArrayField(base_field=models.BooleanField(null=True))
