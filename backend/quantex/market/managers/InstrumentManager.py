@@ -13,7 +13,7 @@ class InstrumentManager(models.Manager):
         return instruments
 
     @transaction.atomic
-    def update_instruments(self, symbols: list):
+    def update_instruments(self, symbols: list, full: bool = False):
         symbolsList = []
         symbolsString = ""
 
@@ -35,22 +35,34 @@ class InstrumentManager(models.Manager):
         
         for instrument in instruments:
             MsgDebug(f"Getting {instrument.symbol} market data from yFinance !")
-            ticker = tickers.tickers.get(instrument.symbol)
+            ticker : yf.Ticker = tickers.tickers.get(instrument.symbol)
 
             if ticker is None: continue
 
-            hist = ticker.history(period="max", interval="1d")
+            # Fetch what you need to update
+
+            marketData : MarketData = instrument.data
+
+            hist = ticker.history(
+                period="max", 
+                interval="1d",
+                start=marketData.date[-1] # Fetch last date entry in db                
+            )
+
+            MsgDebug(hist)
             instrument.details = ticker.info
-            instrument.region = ticker.info.get('country')
-            instrument.name = ticker.info.get('shortName')
-            instrument.data.setData(hist)
-            instrument.cashFlow.setData(ticker.cashflow)
+            instrument.data.setData(hist, append=True)
+
+            if full:
+                instrument.cashFlow.setData(ticker.cashflow, append=True)
+                instrument.region = ticker.info.get('country')
+                instrument.name = ticker.info.get('shortName')
 
             MsgDebug(f"Updating {instrument.name} instrument object to database !")
 
             try:
                 instrument.data.save()
-                instrument.cashFlow.save()
+                if full: instrument.cashFlow.save()
                 instrument.save()
             except IntegrityError as e:
                 MsgError(e)

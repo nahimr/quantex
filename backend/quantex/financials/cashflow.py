@@ -25,10 +25,7 @@ class CashFlow(models.Model):
     changeToNetIncome : list = ArrayField(base_field=models.FloatField(null=True), null=True)
     capitalExpenditures : list = ArrayField(base_field=models.FloatField(null=True), null=True)
 
-    def getData(self) -> pd.DataFrame:
-        dataFrame = pd.DataFrame()
-
-        attrs = [
+    __attrs : list = [
             ("Date", "date"),
             ("Investments", "investments"),
             ("Change To Liabilities", "changeToLiabilities"),
@@ -47,9 +44,12 @@ class CashFlow(models.Model):
             ("Other Cashflows From Financing Activities", "otherCFFinancingActivites"),
             ("Change To Netincome", "changeToNetIncome"),
             ("Capital Expenditures", "capitalExpenditures"),
-        ]
+    ]
 
-        for attr in attrs:
+    def getData(self) -> pd.DataFrame:
+        dataFrame = pd.DataFrame()
+
+        for attr in self.__attrs:
             nameInDF = attr[0]
             attributeInObject = attr[1]
             value = getattr(self, attributeInObject)
@@ -61,39 +61,32 @@ class CashFlow(models.Model):
 
         return dataFrame
 
-    def setData(self, cf : pd.DataFrame) -> None:
+    def setData(self, cf : pd.DataFrame, append : bool = False) -> None:
         if cf is None:
             raise Exception("Cash Flow data is None !")
         
         data = pd.DataFrame.transpose(cf)
 
-        attrs = [
-            ("Investments", "investments"),
-            ("Change To Liabilities", "changeToLiabilities"),
-            ("Total Cashflows From Investing Activities", "totCFInvestingActivities"),
-            ("Net Borrowings", "netBorrowings"),
-            ("Total Cash From Financing Activities", "totCFinancingActivities"),
-            ("Change To Operating Activities", "changeToOperatingActivities"),
-            ("Net Income", "netIncome"),
-            ("Change In Cash", "changeInCash"),
-            ("Repurchase Of Stock", "repurchaseOfStock"),
-            ("Effect Of Exchange Rate", "effectOfExchangeRate"),
-            ("Total Cash From Operating Activities", "totCFOperatingActivites"),
-            ("Depreciation", "depreciation"),
-            ("Other Cashflows From Investing Activities", "otherCFInvestingActivites"),
-            ("Change To Account Receivables", "changeToAccountReceivables"),
-            ("Other Cashflows From Financing Activities", "otherCFFinancingActivites"),
-            ("Change To Netincome", "changeToNetIncome"),
-            ("Capital Expenditures", "capitalExpenditures"),
-        ]
-
-        for attr in attrs:
+        for attr in self.__attrs:
             nameInDF = attr[0]
             attributeInObject = attr[1]
             value = data.get(nameInDF)
             if value is None: continue
+
+            if append:
+                listToExtend : list = getattr(self, attributeInObject)
+                listToExtend.extend(value.values.tolist())
+                setattr(self, attributeInObject, listToExtend)
+                continue
+
             setattr(self, attributeInObject, value.values.tolist())
 
         if data.index is None: return
 
-        self.date = pd.to_datetime(data.index, utc=True).tolist()
+        date_list = pd.to_datetime(data.index, utc=True).tolist()
+
+        if append:
+            self.date.extend(date_list)
+            return
+
+        self.date = date_list
