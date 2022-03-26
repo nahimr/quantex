@@ -20,9 +20,6 @@ class Instrument(models.Model):
 
     def getSymbol(self) -> string:
         return self.symbol
-
-    def getBaseCurrency(self) -> string:
-        return self.baseCurrency
         
     def getRegion(self) -> string:
         return self.region
