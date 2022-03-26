@@ -1,12 +1,13 @@
 import string
 from django.db import IntegrityError, models, transaction
+from django.db.models.query import QuerySet
 import yfinance as yf
 from quantex.financials.cashflow import CashFlow
 from utils.prints import MsgDebug, MsgError, MsgSuccess
 from quantex.market.market_data import MarketData
 
 class InstrumentManager(models.Manager):
-    
+
     def create_instruments(self, symbols: list):
         instruments = [self.create_instrument(symbol) for symbol in symbols]
 
@@ -88,7 +89,19 @@ class InstrumentManager(models.Manager):
         ticker = yf.Ticker(instrument.symbol)
         MsgDebug(f"Getting {symbol} market data from yFinance !")
 
-        hist = ticker.history(period="max", interval="1d")
+        # TODO: Refactor this with a pointer
+
+        if instrument.data is not None:
+            hist = ticker.history(
+                period="max",
+                interval="1d",
+                start=instrument.data.date[-1], # Fetch last date entry in db
+            )
+        else:
+            hist = ticker.history(
+                period="max",
+                interval="1d",
+            )  
 
         if len(hist) < 1:
             instrument.delete()
@@ -116,3 +129,17 @@ class InstrumentManager(models.Manager):
         MsgSuccess(f"Instrument {instrument.name} was updated with success !")
 
         return instrument
+
+
+    def get_instruments(self, symbols : list) -> QuerySet:
+        if symbols is None:
+            raise Exception("Symbols list is empty !")
+
+        instruments = []
+
+        try:
+            instruments = self.filter(symbol__in=symbols)
+        except IntegrityError as e:
+            MsgError(e)
+
+        return instruments

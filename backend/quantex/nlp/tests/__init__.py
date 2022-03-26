@@ -1,0 +1,1 @@
+from .trend_test import TrendTest
