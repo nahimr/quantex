@@ -50,7 +50,6 @@ class InstrumentManager(models.Manager):
                 start=marketData.date[-1] # Fetch last date entry in db                
             )
 
-            MsgDebug(hist)
             instrument.details = ticker.info
             instrument.data.setData(hist, append=True)
 
@@ -89,26 +88,22 @@ class InstrumentManager(models.Manager):
         ticker = yf.Ticker(instrument.symbol)
         MsgDebug(f"Getting {symbol} market data from yFinance !")
 
-        # TODO: Refactor this with a pointer
+        historySettings : dict = {
+            'period' : "max",
+            'interval' : '1d',
+        }
 
         if instrument.data is not None:
-            hist = ticker.history(
-                period="max",
-                interval="1d",
-                start=instrument.data.date[-1], # Fetch last date entry in db
-            )
-        else:
-            hist = ticker.history(
-                period="max",
-                interval="1d",
-            )  
+            historySettings['start'] = instrument.data.date[-1], # Fetch last date entry in db
+
+        hist = ticker.history(**historySettings)
 
         if len(hist) < 1:
             instrument.delete()
 
             MsgError(f"{symbol} ticker doesn't exist !")
             raise Exception(f"{symbol} ticker doesn't exist !")
-        
+
         instrument.data = MarketData(symbol=symbol)
         instrument.cashFlow = CashFlow(symbol=symbol)
         instrument.details = ticker.info
@@ -129,7 +124,6 @@ class InstrumentManager(models.Manager):
         MsgSuccess(f"Instrument {instrument.name} was updated with success !")
 
         return instrument
-
 
     def get_instruments(self, symbols : list) -> QuerySet:
         if symbols is None:
