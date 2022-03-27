@@ -1,7 +1,13 @@
 from rest_framework import serializers
+from quantex.market.market_data import MarketData
 from quantex.market.instrument import Instrument
 
 class InstrumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instrument
-        fields = ('name', 'symbol', 'baseCurrency', 'region', 'data')
+        fields = ('name', 'symbol', 'region', 'data', 'cashFlow', 'details')
+
+class MarketDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MarketData
+        fields = ('symbol', 'date', 'open', 'close', 'low', 'high', 'volume', 'dividends', 'stocks_splits')
