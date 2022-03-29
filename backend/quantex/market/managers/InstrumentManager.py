@@ -40,8 +40,6 @@ class InstrumentManager(models.Manager):
 
             if ticker is None: continue
 
-            # Fetch what you need to update
-
             marketData : MarketData = instrument.data
 
             hist = ticker.history(
