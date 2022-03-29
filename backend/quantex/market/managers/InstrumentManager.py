@@ -73,7 +73,7 @@ class InstrumentManager(models.Manager):
     def create_instrument(self, symbol: string):
         try:
             instrument, created = self.get_or_create(symbol=symbol)
-            MsgDebug(f"{symbol} was created in database !" if created else f"{symbol} already created !")
+            MsgSuccess(f"{symbol} was created in database !" if created else f"{symbol} already created !")
             if not created:
                 MsgSuccess(f"{symbol} was fetched with success from database !")
         except IntegrityError as e:

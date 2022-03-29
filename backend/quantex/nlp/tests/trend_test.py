@@ -13,7 +13,7 @@ class TrendTest(TestCase):
 
     def test_trend(self):
         # Perform trending request
-        trend = TrendReq(hl='en-US', tz=360)
+        trend = TrendReq(hl='en-US', tz=0)
 
         # Keywords list
         kw_list = []
