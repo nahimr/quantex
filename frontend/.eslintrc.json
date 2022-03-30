@@ -1,0 +1,64 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "globals": {
+        "JSX": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx", ".d.ts"]
+            }
+        }
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "indent": ["error", 2],
+        "import/extensions": "off",
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": ["error"],
+        "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+        "react/prefer-stateless-function": "off",
+        "max-len": ["error", { "code": 120 }],
+        "react/destructuring-assignment": ["off"],
+        "import/prefer-default-export": "off",
+        "react/no-did-update-set-state": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [1],
+        "no-plusplus": "off",
+        "no-continue": "off",
+        "no-param-reassign": "off",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": ["error"],
+        "react/jsx-props-no-spreading": "off"
+    },
+    "overrides": [
+        {
+            "files": [
+                "**/__tests__/*"
+            ],
+            "env": {
+                "jest": true
+            }
+        }
+    ]
+}
