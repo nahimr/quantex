@@ -1,0 +1,15 @@
+.toolbar {
+    background-color: #000000;
+}
+
+.toolbarElement {
+    border-radius: 16px;
+    margin: 0 8px 0 0;
+}
+
+.navbar,
+.nav-link,
+.navbar-default {
+    background-image: none !important;
+    color: none !important;
+}
