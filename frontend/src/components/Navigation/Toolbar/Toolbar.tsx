@@ -2,7 +2,7 @@ import React, { Component, ReactNode } from "react";
 import Container from "react-bootstrap/esm/Container";
 import Navbar from "react-bootstrap/esm/Navbar";
 import Nav from "react-bootstrap/esm/Nav";
-import logo from '../../../assets/logo.svg';
+import logo from '../../../assets/logo.png';
 import styles from './Toolbar.module.css';
 
 interface ToolbarStates 
@@ -39,7 +39,9 @@ class Toolbar extends Component<ToolbarProps, ToolbarStates>
                 height="32"
                 className="d-inline-block align-top"
               />{' '}
-              Quantex
+              <p className={styles.title}>
+                Quantex
+              </p>
             </Navbar.Brand>
             <Nav>
               <Nav.Link className={styles.toolbarElement} href="/">Home</Nav.Link>

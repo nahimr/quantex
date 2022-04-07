@@ -2,6 +2,11 @@
     background-color: #000000;
 }
 
+.title {
+    display: inline-block;
+    margin: 2px 0 0 4px;
+}
+
 .toolbarElement {
     border-radius: 16px;
     margin: 0 8px 0 0;
