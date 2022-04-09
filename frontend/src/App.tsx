@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import Toolbar from '../Navigation/Toolbar/Toolbar'
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import Home from '../Navigation/Home/Home';
-
+import Home from './pages/Home/Home';
+import Toolbar from './components/Toolbar/Toolbar';
 
 class App extends Component<any, any> 
 {

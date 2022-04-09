@@ -29,7 +29,7 @@ class Toolbar extends Component<ToolbarProps, ToolbarStates>
   render(): ReactNode {
     return (
       <> 
-        <Navbar className={styles.toolbar} style={{ marginBottom: this.props.margin }} variant="dark">
+        <Navbar className={styles.navbar} style={{ marginBottom: this.props.margin }} variant="dark">
           <Container>
             <Navbar.Brand href="/">
               <img
@@ -44,8 +44,8 @@ class Toolbar extends Component<ToolbarProps, ToolbarStates>
               </p>
             </Navbar.Brand>
             <Nav>
-              <Nav.Link className={styles.toolbarElement} href="/">Home</Nav.Link>
-              <Nav.Link className={styles.toolbarElement} href="/instruments">Instruments</Nav.Link>
+              <Nav.Link className={styles.element} href="/">Home</Nav.Link>
+              <Nav.Link className={styles.element} href="/instruments">Instruments</Nav.Link>
             </Nav>
           </Container>
         </Navbar>

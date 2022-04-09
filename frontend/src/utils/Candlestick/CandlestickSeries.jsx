@@ -19,8 +19,6 @@
 // THE SOFTWARE.
 
 import React from "react";
-import "./styles.css";
-import d3 from "d3";
 import { AbstractSeries } from "react-vis";
 const predefinedClassName =
   "rv-xy-plot__series rv-xy-plot__series--candlestick";
